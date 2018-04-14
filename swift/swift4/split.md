@@ -9,7 +9,7 @@
 func split(separator: Character, maxSplits: Int = default, omittingEmptySubsequences: Bool = default) -> [Substring]
 ```
 
-### Usages
+### Usage
 ```swift
 "Hello, world!!".split(separator: " ")
 // return ["Hello,", "world!!"]

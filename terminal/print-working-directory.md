@@ -1,0 +1,5 @@
+## Print working directory
+
+```
+$ pwd
+```
