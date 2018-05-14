@@ -11,6 +11,11 @@ $ npm install electron --save-dev
 
 ### Add script
 Add start command
+
+```
+vi package.json
+```
+
 Open *package.json*,
 ```
 ...
@@ -75,7 +80,11 @@ index.html
 $ npm i electron-packager --save-dev
 $ node_modules/.bin/electron -v
 $ node_modules/.bin/electron-packager ./ (App name) --platform=darwin --arch=x64 --version=(electron version)
+// on osx,
 //e.g. node_modules/.bin/electron-packager ./ MyApp --platform=darwin --arch=x64 --version=v1.8.4
+// on windows
+> node_modules\.bin\electron -v
+//e.g. node_modules\.bin\electron-packager .\ MyApp --platform=win32 --arch=x64 --version=v1.8.4
 ```
 
 ### js references
