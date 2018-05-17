@@ -4,7 +4,7 @@
 $ pip install selenium
 ```
 
-使用するブラウザのwebdriverが必要。.pyファイル内にパスを記述する。
+別途、使用するブラウザのwebdriverが必要。使用時に.pyファイル内にパスを記述する。
 
 [driver](https://docs.seleniumhq.org/download/)
 [selenium webdriverを使ってWebページを自動操作する](https://qiita.com/KI1208/items/976b423c8e5f86a69e29)
