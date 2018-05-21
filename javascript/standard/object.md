@@ -4,7 +4,7 @@ Object has multiple properties and methods.
 
 ```js
 var obj {
-	name: "hogehoge",
+	name: "foo",
 	age: 10,
 	log: function(props) {
 		console.log(props);

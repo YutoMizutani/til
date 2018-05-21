@@ -5,7 +5,7 @@
 1. Login and go EC2 with region: Tokyo
 2. Launch Instance
 3. Select Amazon Linux AMI
-4. Tag: name : hogehoge
+4. Tag: name : <foo>
 5. Open ports 80 and 22
 
 ### Connect
@@ -26,7 +26,7 @@ Warning: 最初に`ec2-user@`をつけないと接続できません。これは
 
 ### Setup for Amazon Linux AMI
 
-At first, 
+At first,
 
 ```
 [ec2-user@< > ~]$ sudo yum update -y

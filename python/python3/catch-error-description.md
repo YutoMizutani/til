@@ -2,7 +2,7 @@
 
 ```python
 try:
-  print("hogehoge")
+  print("foo")
 except Exception as e:
   print(str(e))
   print("type: " + str(type(e)))

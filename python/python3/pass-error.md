@@ -2,7 +2,7 @@
 
 ```python
 try:
-  # hogehoge
+  # foo
 except:
   pass
 ```

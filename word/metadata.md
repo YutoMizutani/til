@@ -7,11 +7,11 @@
 ### Solve
 
 wordはpandas等で開かないと内部を見れないことを知っていたため、.pdfを開く。
-`hogehoge`で検索した場合、dc:titleタグ内に発見。ググって解決。
+`foo`で検索した場合、dc:titleタグ内に発見。ググって解決。
 
 
 ```
-<dc:title><rdf:Alt><rdf:li xml:lang="x-default">hogehoge</rdf:li></rdf:Alt></dc:title>
+<dc:title><rdf:Alt><rdf:li xml:lang="x-default">foo</rdf:li></rdf:Alt></dc:title>
 ```
 
 [source1](https://www.google.co.jp/search?q=%3Cdc%3Atitle%3E%3Crdf%3AAlt%3E%3Crdf%3Ali+xml%3Alang%3D%22x-default%22%3E&ie=&oe=)

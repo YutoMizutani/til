@@ -4,7 +4,7 @@ mac側で開発した.gitを、Windows側でgit add . するとCRLFで改行文�
 
 ```
 $ git add .
-warning: LF will be replaced by CRLF in hogehoge
+warning: LF will be replaced by CRLF in <foo>
 ```
 
 > なにやら Git が改行コードを CRLF へ変更しようとするらしい。
