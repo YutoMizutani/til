@@ -15,7 +15,7 @@ Port番号を変更する。
 ```
 # What ports, IPs and protocols we listen for
 # Port 22
-Port <foo;different 22, e.g. 2222>
+Port <foo;different 22, e.g. 443>
 ```
 
 sshの再起動
@@ -32,3 +32,4 @@ $ sudo ssh <pi name>@<ip address> -p <foo>
 ```
 
 [ssh: connect to host myremotehost.com port 22: Connection refused](https://askubuntu.com/questions/144364/ssh-connect-to-host-myremotehost-com-port-22-connection-refused)
+[社内プロキシに虐げられてる人たちはVPSとか借りて社外にプロキシ立ててsshトンネルで繋ぐとウハウハですよってお話](https://qiita.com/kiida/items/37557a1029788afec98a)
