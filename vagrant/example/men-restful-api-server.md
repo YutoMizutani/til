@@ -16,7 +16,7 @@ Vagrantfile
 
 Vagrant.configure("2") do |config|
   config.vm.box = "bento/centos-7.4"
-  config.vm.network "private_network", ip: "192.168.41.10"
+  config.vm.network "private_network", ip: "192.168.40.10"
   config.vm.provider "virtualbox" do |vb|
     # At least 4 GB
     vb.memory = "4096"
@@ -45,7 +45,7 @@ echo "Exit if already bootstrapped"
 test -f /etc/bootstrapped && exit
 
 echo "Update yum"
-sudo yum update
+sudo yum update -y
 
 # https://qiita.com/kurun/items/d957e65a084019f9f610
 echo "Install vim and epel first"
@@ -55,17 +55,21 @@ sudo yum -y install vim epel-release
 
 echo "Install MongoDB"
 # http://blog.katty.in/3922
-sudo cat << 'EOT' | sudo tee /etc/yum.repos.d/mongodb.repo
-[mongodb]
+# https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/
+sudo cat << 'EOT' | sudo tee /etc/yum.repos.d/mongodb-org-3.6.repo
+[mongodb-org-3.6]
 name=MongoDB Repository
-baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64/
-gpgcheck=0
+baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.6/x86_64/
+gpgcheck=1
 enabled=1
+gpgkey=https://www.mongodb.org/static/pgp/server-3.6.asc
 EOT
 
-sudo yum -y install mongodb-org
-service mongod start
-chkconfig mongod on
+sudo yum install -y mongodb-org mongodb-org-server mongodb-org-shell
+export PATH=$PATH:/usr/bin/mongodb/ >> ~/.bash_profile
+source ~/.bash_profile
+sudo service mongod start
+sudo chkconfig mongod on
 
 echo "Install Node.js and npm"
 # https://github.com/hokaccha/nodebrew
@@ -81,8 +85,9 @@ cd jsonAPI
 mkdir app
 cd app
 mkdir models
+cd ..
 
-cat << 'EOT' > package.json
+cat << 'EOT' > ./package.json
 {
     "name": "jsonAPI",
     "main": "server.js",
@@ -94,13 +99,20 @@ cat << 'EOT' > package.json
 }
 EOT
 
-cat << 'EOT' > server.js
+cat << 'EOT' > ./server.js
 // server.js
 
 // 必要なパッケージの読み込み
 var express    = require('express');
 var app        = express();
 var bodyParser = require('body-parser');
+
+// DBへの接続
+var mongoose   = require('mongoose');
+mongoose.connect('mongodb://localhost/jsonAPI');
+
+// モデルの宣言
+var User       = require('./app/models/user');
 
 // POSTでdataを受け取るための記述
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -122,6 +134,79 @@ router.get('/', function(req, res) {
     res.json({ message: 'Hello, RESTful API!!' });
 });
 
+// /users というルートを作成する．
+// ----------------------------------------------------
+router.route('/users')
+
+// ユーザの作成 (POST http://localhost:3000/api/users)
+    .post(function(req, res) {
+
+        // 新しいユーザのモデルを作成する．
+        var user = new User();
+
+        // ユーザの各カラムの情報を取得する．
+        user.twitter_id = req.body.twitter_id;
+        user.name = req.body.name;
+        user.age = req.body.age;
+
+        // ユーザ情報をセーブする．
+        user.save(function(err) {
+            if (err)
+                res.send(err);
+            res.json({ message: 'User created!' });
+        });
+    })
+
+// 全てのユーザ一覧を取得 (GET http://localhost:8080/api/users)
+    .get(function(req, res) {
+        User.find(function(err, users) {
+            if (err)
+                res.send(err);
+            res.json(users);
+        });
+    });
+
+// /users/:user_id というルートを作成する．
+// ----------------------------------------------------
+router.route('/users/:user_id')
+
+// 1人のユーザの情報を取得 (GET http://localhost:3000/api/users/:user_id)
+    .get(function(req, res) {
+        //user_idが一致するデータを探す．
+        User.findById(req.params.user_id, function(err, user) {
+            if (err)
+                res.send(err);
+            res.json(user);
+        });
+    })
+// 1人のユーザの情報を更新 (PUT http://localhost:3000/api/users/:user_id)
+    .put(function(req, res) {
+        User.findById(req.params.user_id, function(err, user) {
+            if (err)
+                res.send(err);
+            // ユーザの各カラムの情報を更新する．
+            user.twitter_id = req.body.twitter_id;
+            user.name = req.body.name;
+            user.age = req.body.age;
+
+            user.save(function(err) {
+                if (err)
+                    res.send(err);
+                res.json({ message: 'User updated!' });
+            });
+        });
+    })
+
+// 1人のユーザの情報を削除 (DELETE http://localhost:3000/api/users/:user_id)
+    .delete(function(req, res) {
+        User.remove({
+            _id: req.params.user_id
+        }, function(err, user) {
+            if (err)
+                res.send(err);
+            res.json({ message: 'Successfully deleted' });
+        });
+    });
 
 // ルーティング登録
 app.use('/api', router);
@@ -137,6 +222,31 @@ npm install
 echo "npm audit fix --force"
 npm audit fix --force
 
+echo "Start MongoDB"
+sudo mongod --dbpath ~/var/db/mongo/
+
+mongo << 'EOT'
+use jsonAPI
+db.createCollection('user')
+show collections
+quit()
+EOT
+
+cat << 'EOT' > ./app/models/user.js
+// app/models/user.js
+
+var mongoose     = require('mongoose');
+var Schema       = mongoose.Schema;
+
+var UserSchema   = new Schema({
+    twitter_id : { type: String, required: true, unique: true },
+    name: String,
+    age: Number
+});
+
+module.exports = mongoose.model('User', UserSchema);
+EOT
+
 echo "Start server"
 node server.js
 ```
@@ -145,7 +255,7 @@ Setup vagrant
 
 ```
 $ vagrant up
-$ curl http://192.168.41.10:3000/api
+$ curl http://192.168.40.10:3000/api
 ```
 
 [Node.js + Express 4.x + MongoDB(Mongoose)でRESTfulなjsonAPIサーバの作成を丁寧に解説する．+ テストクライアントを用いたAPIテストまで](https://qiita.com/shopetan/items/58a62a366aac4f5faa20)
