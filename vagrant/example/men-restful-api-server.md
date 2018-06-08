@@ -255,7 +255,28 @@ Setup vagrant
 
 ```
 $ vagrant up
+
 $ curl http://192.168.40.10:3000/api
+
+// GET /api
+$ curl -H "Accept: application/json" -H "Content-type: application/json" -X GET http://192.168.40.10:3000/api
+
+// POST /api/users
+$ curl -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"twitter_id":"testid3","name":"parson3","age":21}'  http://192.168.40.10:3000/api/users
+
+// GET /api/users
+$ curl -H "Accept: application/json" -H "Content-type: application/json" -X GET http://192.168.40.10:3000/api/users
+
+// 以下、<foo>に"_id"を指定する。
+
+// GET /api/users/:user_id"
+$ curl -H "Accept: application/json" -H "Content-type: application/json" -X GET http://192.168.40.10:3000/api/users/<foo>
+
+// PUT /api/users/:user_id"
+$ curl -H "Accept: application/json" -H "Content-type: application/json" -X PUT -d '{"twitter_id":"testid2","name":"parson20","age":50}'  http://192.168.40.10:3000/api/users/<foo>
+
+// DELETE /api/users/:user_id"
+$ curl -H "Accept: application/json" -H "Content-type: application/json" -X DELETE http://192.168.40.10:3000/api/users/<foo>
 ```
 
 [Node.js + Express 4.x + MongoDB(Mongoose)でRESTfulなjsonAPIサーバの作成を丁寧に解説する．+ テストクライアントを用いたAPIテストまで](https://qiita.com/shopetan/items/58a62a366aac4f5faa20)
