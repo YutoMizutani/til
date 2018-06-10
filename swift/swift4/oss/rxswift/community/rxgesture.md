@@ -27,6 +27,14 @@ view.rx
   .disposed(by: stepBag)
 ```
 
+#### Filtering State
+
+| Kind | States |
+|--|--|
+| `.tap()` `.click()` `.rightClick()` .swipe() | `.recognized` |
+| `.longPress()` `.press()` | `.began` |
+| .`pan()` `.pinch()` `.rotation()` `.magnification()` `.screenEdgePan()` | `.began` `.changed` `.ended` |
+
 #### iOS
 
 On iOS, RxGesture supports:
