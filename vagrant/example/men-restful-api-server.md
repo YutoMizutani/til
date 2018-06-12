@@ -156,7 +156,7 @@ router.route('/users')
         });
     })
 
-// 全てのユーザ一覧を取得 (GET http://localhost:8080/api/users)
+// 全てのユーザ一覧を取得 (GET http://localhost:3000/api/users)
     .get(function(req, res) {
         User.find(function(err, users) {
             if (err)
