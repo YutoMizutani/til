@@ -39,7 +39,6 @@ bootstrap.sh
 ```sh
 #!/usr/bin/env bash
 
-
 # http://blogs.zealot.co.jp/archives/176
 echo "Exit if already bootstrapped"
 test -f /etc/bootstrapped && exit
