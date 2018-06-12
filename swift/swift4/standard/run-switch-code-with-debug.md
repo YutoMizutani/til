@@ -15,3 +15,4 @@
 ```
 
 [Swiftでifdef DEBUGのようにデバッグ時にのみ処理するコードを書く](https://trueman-developer.blogspot.com/2016/12/swiftifdef-debug.html)
+[Swift での #ifdef DEBUG のやり方](https://qiita.com/qmihara/items/a6b88b74fe64e1e05ca4)
