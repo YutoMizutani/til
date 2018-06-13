@@ -1,10 +1,8 @@
-## HttpClient
+## HttpClient GET
 
 #### Requre
 
 Angular 4.3以上
-
-## GET
 
 #### 基本アクセス
 
