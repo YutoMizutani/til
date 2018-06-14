@@ -1,4 +1,4 @@
-## FizzBuzz on Swift4
+## FizzBuzz written in Swift4
 
 ```swift
 let array: [Int] = (1...100).map{ $0 }
