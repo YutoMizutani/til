@@ -1,7 +1,5 @@
 ## UISlider to UILabel on RxSwift
 
-*OCAでメモリリークした事例を確認しておく。*
-
 ```swift
 import RxSwift
 import RxCocoa
