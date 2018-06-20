@@ -24,7 +24,11 @@ def scheduler_today(f, _time: str):
     run_at = int(time.mktime(run_at.utctimetuple()))
     scheduler.enterabs(run_at, 1, f)
     scheduler.run()
+```
 
+#### Usage
+
+```python
 if __name__ == "__main__":
     """ Usage """
     def hello():
