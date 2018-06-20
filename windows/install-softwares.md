@@ -48,6 +48,26 @@
     - Ricty font
 * Atom (AtomSetup-x64.exe)
   - Install packages
+    - Hydrogen
+    - atom-beautify
+    - autocomplete
+    - file-icons
+    - color-picker
+    - highlight-selected
+    - japanese-menu
+    - japanese-word-selection
+    - language-markdown
+    - markdown-pdf
+    - markdown-preview-plus
+    - markdown-writer
+    - minimap
+    - minimap-find-and-replace
+    - minimap-git-diff
+    - minimap-highlight-selected
+    - multi-cursor
+    - platformio-ide-terminal
+  - Themes
+    - One Dark
 * Sublime Text (Sublime Text Build 3143 x64 Setup.exe)
 
 #### Git
