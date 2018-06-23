@@ -20,9 +20,7 @@ defaults write com.apple.screencapture include-date -bool false
 defaults write com.apple.screencapture location "~/Pictures/screenshot"
 killall SystemUIServer
 EOT
-```
 
-```sh
 # Add install script folder
 cd ~ && mkdir scripts/dependencies && cd scripts/dependencies
 
