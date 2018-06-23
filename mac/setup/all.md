@@ -1,6 +1,9 @@
 ## All install script
 
 ```sh
+sudo su
+exit
+
 # Add settings folder
 cd ~ && mkdir scripts/settings && cd scripts/settings
 
@@ -40,7 +43,9 @@ EOT
 cat << 'EOT' > install-homebrew.sh
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 brew upgrade --cleanup
-brew install caskroom/cask/brew-cask
+brew install bash
+export HOMEBREW_CASK_OPTS="--appdir=/Applications" >> .bashrc
+source .bashrc
 EOT
 
 cat << 'EOT' > install-nodebrew.sh
@@ -80,12 +85,24 @@ EOT
 
 # Install zsh
 cat << 'EOT' > install-zsh.sh
+cp .bashrc .zshrc
+cp .bash_profile .zprofile
 brew install zsh zsh-completions
+echo /usr/local/bin/zsh | sudo tee -a /etc/shells
+chsh -s /usr/local/bin/zsh
+zsh
+git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+setopt EXTENDED_GLOB
 EOT
 
 # Install wget
 cat << 'EOT' > install-wget.sh
 brew install wget
+EOT
+
+# Install mas
+cat << 'EOT' > install-mas.sh
+brew install mas
 EOT
 
 ## brew cask installs
@@ -173,31 +190,6 @@ EOT
 # Install The Unarchive
 cat << 'EOT' > install-the-unarchiver.sh
 brew cask install the-unarchiver
-EOT
-
-# Install Atom
-cat << 'EOT' > install-atom.sh
-brew cask install atom
-EOT
-
-# Install Atom
-cat << 'EOT' > install-atom.sh
-brew cask install atom
-EOT
-
-# Install Atom
-cat << 'EOT' > install-atom.sh
-brew cask install atom
-EOT
-
-# Install Atom
-cat << 'EOT' > install-atom.sh
-brew cask install atom
-EOT
-
-# Install Atom
-cat << 'EOT' > install-atom.sh
-brew cask install atom
 EOT
 
 # Move folder
