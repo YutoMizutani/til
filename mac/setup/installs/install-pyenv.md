@@ -10,9 +10,8 @@ echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bash_profile
 echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bash_profile
 echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
 source ~/.bash_profile
-pyenv rehash
 python2=$(pyenv install -l | grep -v '[a-zA-Z]' | grep -e '\s2\.?*' | tail -1)
-python3=$(pyenv install -l | grep -v '[a-zA-Z]' | grep -e '\s2\.?*' | tail -1)
+python3=$(pyenv install -l | grep -v '[a-zA-Z]' | grep -e '\s3\.?*' | tail -1)
 pyenv install $python2
 pyenv install $python3
 pyenv global $python2 $python3
@@ -42,3 +41,4 @@ $ pyenv install -l | grep -v '[a-zA-Z]' | grep -e '\s3\.?*' | tail -1
 [grepコマンドの詳細まとめました【Linuxコマンド集】](https://eng-entrance.com/linux-command-grep)
 [変数を使用する – UNIX & Linux コマンド・シェルスクリプト リファレンス](https://shellscript.sunone.me/variable.html)
 [MacでPython使う時の最低限のメモ（pyenv編）](https://qiita.com/zaburo/items/dd1a8323633035614efc)
+[【へぇ】IT業界でよく見る、rc版、とかga版とはなんぞや](https://chat-rate.com/it/2200/)
