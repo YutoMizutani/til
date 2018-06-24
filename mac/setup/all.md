@@ -21,6 +21,11 @@ defaults write com.apple.screencapture location "~/Pictures/screenshot"
 killall SystemUIServer
 EOT
 
+# Settings auto-run photos app when any iOS devices connected
+cat << 'EOT' > settings-photos.sh
+defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool YES
+EOT
+
 # Add install script folder
 cd ~ && mkdir scripts/dependencies && cd scripts/dependencies
 

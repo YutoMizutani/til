@@ -15,6 +15,4 @@ setopt EXTENDED_GLOB
 [zsh-users/zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)
 [え、まだpecoを使ってないの？？？](https://qiita.com/vintersnow/items/08852df841e8d5faa7c2)
 [wting/autojump](https://github.com/wting/autojump)
-[]()
-[]()
-[]()
+[peco/peco](https://github.com/peco/peco)
