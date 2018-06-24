@@ -30,11 +30,27 @@ xcode-select --install
 EOT
 
 # Install ruby (rbenv, bundler)
-cat << 'EOT' > install-ruby.sh
+cat << 'EOT' > install-rbenv.sh
 brew install rbenv ruby-build
 rbenv r install $(rbenv install -l | grep -v - | tail -1)
 gem install bundler
 rbenv rehash
+EOT
+
+# Install python (pyenv, virtualenv, python2, python3)
+cat << 'EOT' > install-pyenv.sh
+brew install pyenv pyenv-virtualenv
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bash_profile
+echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bash_profile
+echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
+source ~/.bash_profile
+pyenv rehash
+python2=$(pyenv install -l | grep -v '[a-zA-Z]' | grep -e '\s2\.?*' | tail -1)
+python3=$(pyenv install -l | grep -v '[a-zA-Z]' | grep -e '\s2\.?*' | tail -1)
+pyenv install $python2
+pyenv install $python3
+pyenv global $python2 $python3
+pyenv rehash
 EOT
 
 # Install Homebrew
@@ -85,7 +101,7 @@ EOT
 cat << 'EOT' > install-zsh.sh
 cp .bashrc .zshrc
 cp .bash_profile .zprofile
-brew install zsh zsh-completions zsh-syntax-highlighting
+brew install zsh zsh-completions zsh-syntax-highlighting autojump peco
 echo source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh >> ~/.zshrc
 echo /usr/local/bin/zsh | sudo tee -a /etc/shells
 chsh -s /usr/local/bin/zsh
@@ -208,7 +224,8 @@ done
 
 cd dependencies
 sh install-xcode.sh
-sh install-ruby.sh
+sh install-rbenv.sh
+sh install-pyenv.sh
 sh install-homebrew.sh
 sh install-nodebrew.sh
 cd ..
