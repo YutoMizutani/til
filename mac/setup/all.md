@@ -42,15 +42,15 @@ cat << 'EOT' > install-homebrew.sh
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 brew upgrade --cleanup
 brew install bash
-export HOMEBREW_CASK_OPTS="--appdir=/Applications" >> .bashrc
+echo export HOMEBREW_CASK_OPTS="--appdir=/Applications" >> .bashrc
 source .bashrc
 EOT
 
 cat << 'EOT' > install-nodebrew.sh
 brew install nodebrew
 nodebrew setup
-export PATH=/usr/local/var/nodebrew/current/bin:$PATH >> ~/.bash_profile
-export PATH=$HOME/.nodebrew/current/bin:$PATH >> ~/.bash_profile
+echo export PATH=/usr/local/var/nodebrew/current/bin:$PATH >> ~/.bash_profile
+echo export PATH=$HOME/.nodebrew/current/bin:$PATH >> ~/.bash_profile
 source .bash_profile
 nodebrew install-binary stable
 nodebrew use stable
@@ -85,7 +85,8 @@ EOT
 cat << 'EOT' > install-zsh.sh
 cp .bashrc .zshrc
 cp .bash_profile .zprofile
-brew install zsh zsh-completions
+brew install zsh zsh-completions zsh-syntax-highlighting
+echo source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh >> ~/.zshrc
 echo /usr/local/bin/zsh | sudo tee -a /etc/shells
 chsh -s /usr/local/bin/zsh
 zsh
