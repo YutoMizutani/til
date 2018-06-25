@@ -1,7 +1,9 @@
 ## OSS filesystem
 
 /
-
+docs/
+lib/
+test/
 .gitignore
 LICENSE.md
 README.md
