@@ -48,6 +48,7 @@ EOT
 
 swiftc -o main main.swift hello.swift
 ./main
+rm main.swift hello.swift main  # 後片付け
 ```
 
 ## References
