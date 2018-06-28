@@ -1,4 +1,4 @@
-## Compile multiple swift files without Swift package manager
+## Compile multiple swift files without Swift Package Manager
 
 複数のファイルをSwift PMを用いずにコンパイルする。
 
@@ -7,7 +7,7 @@
 import Foundation
 
 let hello = Hello()
-print(hello.hello())
+hello.say()
 ```
 
 ```swift
@@ -15,8 +15,8 @@ print(hello.hello())
 import Foundation
 
 struct Hello {
-    func hello() -> String {
-        return "Hello, world!!"
+    func say() {
+        print("Hello, world!!")
     }
 }
 ```
@@ -24,5 +24,31 @@ struct Hello {
 ```sh
 $ xcrun -sdk macosx swiftc -o main main.swift hello.swift
 ```
+
+## One liner
+
+```sh
+cat << 'EOT' > main.swift
+import Foundation
+
+let hello = Hello()
+hello.say()
+EOT
+
+cat << 'EOT' > hello.swift
+import Foundation
+
+struct Hello {
+    func say() {
+        print("Hello, world!!")
+    }
+}
+EOT
+
+xcrun -sdk macosx swiftc -o main main.swift hello.swift
+./main
+```
+
+## References
 
 [分割コンパイル](https://www.beginning-swift.com/compile-separate-source)
