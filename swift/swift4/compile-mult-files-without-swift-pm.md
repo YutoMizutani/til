@@ -51,4 +51,4 @@ xcrun -sdk macosx swiftc -o main main.swift hello.swift
 
 ## References
 
-[分割コンパイル](https://www.beginning-swift.com/compile-separate-source)
+[分割コンパイル – Swiftをはじめよう！](https://www.beginning-swift.com/compile-separate-source)
