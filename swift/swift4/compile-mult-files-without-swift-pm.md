@@ -22,7 +22,8 @@ struct Hello {
 ```
 
 ```sh
-$ xcrun -sdk macosx swiftc -o main main.swift hello.swift
+$ swiftc -o main main.swift hello.swift
+$ ./main
 ```
 
 ## One liner
@@ -45,7 +46,7 @@ struct Hello {
 }
 EOT
 
-xcrun -sdk macosx swiftc -o main main.swift hello.swift
+swiftc -o main main.swift hello.swift
 ./main
 ```
 
