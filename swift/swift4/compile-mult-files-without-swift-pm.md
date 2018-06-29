@@ -51,6 +51,11 @@ swiftc -o main main.swift hello.swift
 rm main.swift hello.swift main  # 後片付け
 ```
 
+## 追記
+
+[Swiftをコマンドラインでコンパイルする方法](http://rodhos.hatenadiary.jp/entry/2017/06/23/142512) に書かれていた。
+
 ## References
 
 [分割コンパイル – Swiftをはじめよう！](https://www.beginning-swift.com/compile-separate-source)
+[Swiftをコマンドラインでコンパイルする方法](http://rodhos.hatenadiary.jp/entry/2017/06/23/142512)
