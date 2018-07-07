@@ -60,9 +60,11 @@ EOT
 # Install Homebrew
 cat << 'EOT' > install-homebrew.sh
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+brew analytics off
 brew upgrade --cleanup
 brew install bash
 echo export HOMEBREW_CASK_OPTS="--appdir=/Applications" >> .bashrc
+echo export HOMEBREW_NO_ANALYTICS=1 >> .bashrc
 source .bashrc
 EOT
 
