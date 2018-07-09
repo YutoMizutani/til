@@ -8,6 +8,9 @@ chsh -s /usr/local/bin/zsh
 zsh
 git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
 setopt EXTENDED_GLOB
+for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
+  ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+done
 ```
 
 [Homebrewで最新のzshをインストール](https://saku.io/install-latest-zsh-using-homebrew/)
