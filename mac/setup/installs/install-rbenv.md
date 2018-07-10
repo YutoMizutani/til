@@ -8,7 +8,8 @@ $ brew install rbenv ruby-build
 
 ```
 $ brew install rbenv ruby-build
-$ rbenv r install $(rbenv install -l | grep -v - | tail -1)
+$ rbenv install $(rbenv install -l | grep -v - | tail -1)
+$ rbenv global $(rbenv install -l | grep -v - | tail -1)
 $ gem install bundler
 $ rbenv rehash
 ```
