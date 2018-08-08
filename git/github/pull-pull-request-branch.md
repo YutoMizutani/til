@@ -12,7 +12,7 @@ git fetch upstream pull/726/head:pullreq/726
 ```
 
 ```
-git fetch upstream pull/703/head:pullreq/703 && checkout pullreq/703
+git fetch upstream pull/703/head:pr/703 && git checkout pr/703
 ```
 
 [Githubで特定のpull requestをローカルに持ってくる](https://qiita.com/tarr1124/items/d807887418671adbc46f)
