@@ -6,6 +6,15 @@
 print(RxSwift.Resources.total)
 ```
 
+```swift
+#if TRACE_RESOURCES
+let timer = Timer.init(timeInterval: 3.0, target: BlockOperation.init(block: {
+    print("### Resource count \(RxSwift.Resources.total)")
+}), selector: #selector(Operation.main), userInfo: nil, repeats: true)
+RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
+#endif
+```
+
 #### Setup
 
 1. Update config
