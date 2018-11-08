@@ -1,0 +1,8 @@
+## sentMessageとmethodInvoked
+
+> 使い道としては指定した関数内の同期処理が完全に終わってるタイミングを保証できるのがmethodInvokedです。なので、指定した関数内の処理後でないと特定のプロパティが更新されていない可能性があるなどのものは全てmethodInvokedを使います。反対に指定した関数が呼ばれたタイミングで関数内の処理とは無関係に処理したい場合はsentMessageを使います。
+:warning:
+注意として指定した関数内に非同期処理があった場合にはそれは関数オプジェクトの生存期間と別管理となるため無視されます。sentMessageとmethodInvokedの内部実装ではSelectorが呼ばれるタイミングと関数がdeallocatedされたタイミングで通知を行なっているので関数がdeallocatedになっても処理が継続するものについては通常通りcompletion等で対応するしかありません。
+
+[メソッドのhookは正しいタイミングで行おう【RxSwift/RxCocoa】](https://qiita.com/rinov/items/69abcdbaa321102f6d90)
+[RxSwift/RxCocoa/Foundation/NSObject+Rx.swift](https://github.com/ReactiveX/RxSwift/blob/102424379fb8d6c69b33b95c67504679042f44cc/RxCocoa/Foundation/NSObject%2BRx.swift)
