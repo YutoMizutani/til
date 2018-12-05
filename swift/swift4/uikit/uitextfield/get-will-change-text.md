@@ -5,6 +5,7 @@
 ```swift
 func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
     let result: String = "\((textField.text as NSString?)?.replacingCharacters(in: range, with: string) ?? string)"
+    let result: String? = ((textField.text ?? "") as NSString).replacingCharacters(in: range, with: string)
     // falseの場合は入力をキャンセルできる
     return true
 }
