@@ -5,7 +5,7 @@ sudo su
 exit
 
 # Add settings folder
-cd ~ && mkdir scripts/settings && cd scripts/settings
+cd ~ && mkdir script && mkdir scripts/settings && cd scripts/settings
 
 # Settings Finder (Show hidden files)
 cat << 'EOT' > settings-finder.sh
