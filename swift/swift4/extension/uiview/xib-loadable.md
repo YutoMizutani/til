@@ -16,6 +16,9 @@ public protocol XibLoadable {
 
     /// クラス名と一致した Xib ファイルを読み出す
     static var xib: T? { get }
+
+    /// クラス名と一致した Xib ファイルを読み出す
+    static func xib(frame: CGRect) -> T?
 }
 
 public extension XibLoadable where Self: UIView {
@@ -24,9 +27,14 @@ public extension XibLoadable where Self: UIView {
         guard let className = className else { return nil }
         return Bundle.main.loadNibNamed(className, owner: self, options: nil)?.first as? T
     }
-}
 
-extension UIView: XibLoadable {}
+    /// クラス名と一致した Xib ファイルを読み出す
+    static func xib(frame: CGRect = .zero) -> T? {
+        let view = xib
+        view?.frame = frame
+        return view
+    }
+}
 ```
 
 [A Swift protocol requirement that can only be satisfied by using a final class](https://stackoverflow.com/questions/37141067/a-swift-protocol-requirement-that-can-only-be-satisfied-by-using-a-final-class/37141531)
