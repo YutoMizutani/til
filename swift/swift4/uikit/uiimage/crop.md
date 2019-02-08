@@ -23,7 +23,7 @@ extension CGRect {
 }
 
 extension UIImage {
-    func cropped(from rect: CGRect) -> UIImage? {
+    func cropping(to rect: CGRect) -> UIImage? {
         let croppingRect: CGRect = imageOrientation.isLandscape ? rect.switched : rect
         guard let cgImage: CGImage = self.cgImage?.cropping(to: croppingRect) else { return nil }
         let cropped: UIImage = UIImage(cgImage: cgImage, scale: scale, orientation: imageOrientation)
