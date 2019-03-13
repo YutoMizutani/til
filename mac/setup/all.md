@@ -1,9 +1,6 @@
 ## All install script
 
 ```sh
-sudo su
-exit
-
 # Add settings folder
 cd ~ && mkdir scripts && mkdir scripts/settings && cd scripts/settings
 
@@ -42,18 +39,16 @@ gem install bundler
 rbenv rehash
 EOT
 
-# Install python (pyenv, virtualenv, python2, python3)
+# Install python (pyenv, virtualenv, python3)
 cat << 'EOT' > install-pyenv.sh
 brew install pyenv pyenv-virtualenv
 echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bash_profile
 echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bash_profile
 echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
 source ~/.bash_profile
-python2=$(pyenv install -l | grep -v '[a-zA-Z]' | grep -e '\s2\.?*' | tail -1)
 python3=$(pyenv install -l | grep -v '[a-zA-Z]' | grep -e '\s3\.?*' | tail -1)
-pyenv install $python2
 pyenv install $python3
-pyenv global $python2 $python3
+pyenv global $python3
 pyenv rehash
 EOT
 
@@ -61,7 +56,7 @@ EOT
 cat << 'EOT' > install-homebrew.sh
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 brew analytics off
-brew upgrade --cleanup
+brew upgrade
 brew install bash
 echo export HOMEBREW_CASK_OPTS="--appdir=/Applications" >> .bashrc
 echo export HOMEBREW_NO_ANALYTICS=1 >> .bashrc
@@ -111,7 +106,6 @@ brew install zsh zsh-completions zsh-syntax-highlighting autojump peco
 echo source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh >> ~/.zshrc
 echo /usr/local/bin/zsh | sudo tee -a /etc/shells
 chsh -s /usr/local/bin/zsh
-zsh
 git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
 setopt EXTENDED_GLOB
 for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
@@ -159,11 +153,6 @@ EOT
 # Install Dropbox
 cat << 'EOT' > install-dropbox.sh
 brew cask install dropbox
-EOT
-
-# Install Kobito
-cat << 'EOT' > install-kobito.sh
-brew cask install kobito
 EOT
 
 # Install Vagrant
@@ -245,8 +234,9 @@ for file in `\find ./installers/ -name '*.sh'`; do
 done
 
 # update
-brew upgrade --cleanup
+brew upgrade
 brew cask upgrade
 EOT
+
 sh run.sh
 ```
