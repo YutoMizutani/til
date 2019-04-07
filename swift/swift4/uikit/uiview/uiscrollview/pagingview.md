@@ -91,6 +91,11 @@ class PagingView: UIScrollView {
         configurePosition()
     }
 
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        layoutView()
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
         layoutView()

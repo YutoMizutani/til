@@ -53,7 +53,7 @@ class ContainerView: UIView {
 
     /// Layout views
     private func layoutView() {
-        frame = viewController.view.bounds
+        frame.size = viewController.view.bounds.size
     }
 }
 ```
