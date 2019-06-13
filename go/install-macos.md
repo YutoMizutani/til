@@ -1,0 +1,5 @@
+## Install
+
+```
+$ brew install go
+```
