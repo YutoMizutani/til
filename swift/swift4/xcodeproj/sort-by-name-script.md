@@ -1,8 +1,9 @@
 ## A script sorted by name
 
 ```
-$ curl get https://raw.githubusercontent.com/WebKit/webkit/master/Tools/Scripts/sort-Xcode-project-file > script.pl
-$ perl script.pl <project>.xcodeproj
+$ curl get https://raw.githubusercontent.com/WebKit/webkit/master/Tools/Scripts/sort-Xcode-project-file > ./script.pl
+$ perl ./script.pl <project>.xcodeproj
+$ rm ./script.pl
 ```
 
 [webkit/Tools/Scripts/sort-Xcode-project-file](https://github.com/WebKit/webkit/blob/master/Tools/Scripts/sort-Xcode-project-file)
