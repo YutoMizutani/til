@@ -1,7 +1,12 @@
 ## Cleaning
 
 ```sh
-rm -rf ~/Library/Developer/Xcode/Archives/* ~/Library/Developer/Xcode/DerivedData/* ~/Library/Developer/Xcode/iOS\ DeviceSupport/* ~/Library/Logs/iOS\ Simulator/* && sleep 1s && terminal-notifier -message 'Cleaning Storage: Complete all processes on Terminal!'
+rm -rf ~/Library/Developer/Xcode/Archives/* \
+    ; rm -rf ~/Library/Developer/Xcode/DerivedData/* \
+    ; rm -rf ~/Library/Developer/Xcode/iOS\ DeviceSupport/* \
+    ; rm -rf ~/Library/Logs/iOS\ Simulator/* \
+    ; sleep 1s \
+    && terminal-notifier -message 'Cleaning Storage: Complete all processes on Terminal!'
 ```
 
 ```sh
