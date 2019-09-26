@@ -37,3 +37,62 @@ public final class ReplayRelay<Element>: ObservableType {
     }
 }
 ```
+
+```swift
+//
+//  ReplayRelay+Bind.swift
+//
+//  Created by Yuto Mizutani on 2019/09/25.
+//
+
+import RxSwift
+
+// cf. https://raw.githubusercontent.com/ReactiveX/RxSwift/c6c0c540109678b96639c25e9c0ebe4a6d7a69a9/RxRelay/Observable%2BBind.swift
+public extension ObservableType {
+    /**
+     Creates new subscription and sends elements to publish relay(s).
+     In case error occurs in debug mode, `fatalError` will be raised.
+     In case error occurs in release mode, `error` will be logged.
+     - parameter to: Target publish relays for sequence elements.
+     - returns: Disposable object that can be used to unsubscribe the observer.
+     */
+    func bind(to relays: ReplayRelay<Element>...) -> Disposable {
+        return bind(to: relays)
+    }
+
+    /**
+     Creates new subscription and sends elements to publish relay(s).
+
+     In case error occurs in debug mode, `fatalError` will be raised.
+     In case error occurs in release mode, `error` will be logged.
+
+     - parameter to: Target publish relays for sequence elements.
+     - returns: Disposable object that can be used to unsubscribe the observer.
+     */
+    func bind(to relays: ReplayRelay<Element?>...) -> Disposable {
+        return map { $0 as Element? }.bind(to: relays)
+    }
+
+    /**
+     Creates new subscription and sends elements to publish relay(s).
+     In case error occurs in debug mode, `fatalError` will be raised.
+     In case error occurs in release mode, `error` will be logged.
+     - parameter to: Target publish relays for sequence elements.
+     - returns: Disposable object that can be used to unsubscribe the observer.
+     */
+    private func bind(to relays: [ReplayRelay<Element>]) -> Disposable {
+        return subscribe { e in
+            switch e {
+            case let .next(element):
+                relays.forEach {
+                    $0.accept(element)
+                }
+            case let .error(error):
+                assertionFailure("Binding error to publish relay: \(error)")
+            case .completed:
+                break
+            }
+        }
+    }
+}
+```
