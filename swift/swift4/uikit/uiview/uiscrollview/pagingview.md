@@ -1,7 +1,144 @@
 ## PagingView
 
 ```swift
-import UIKit
+class PagingView: UIScrollView {
+    fileprivate var initialPage: Int = 0
+    private var disposeBag = DisposeBag()
+
+    /// 最後にタッチされた位置
+    var lastTouchedLocation: CGPoint? = nil {
+        didSet {
+            guard let location = lastTouchedLocation else { return }
+            rxLastTouchedLocation.accept(location)
+        }
+    }
+    fileprivate var rxLastTouchedLocation: PublishRelay<CGPoint> = PublishRelay()
+
+    /// 現在のページ
+    lazy var page: Int = initialPage
+    fileprivate var rxPage: ControlProperty<Int> {
+        let source: Observable<Int> = Observable.deferred { [weak pagingView = self] in
+            guard let pagingView = pagingView else { return Observable.empty() }
+            let pageChanged: Observable<Int> = Observable.merge(
+                pagingView.rx.didEndDragging.filter { !$0 }.mapToVoid(),
+                pagingView.rx.didEndDecelerating.asObservable(),
+                pagingView.rx.didEndScrollingAnimation.asObservable())
+                .filter { [weak self] in self != nil }
+                .map { [unowned self] in self.contentViews.page(self.contentOffset, isVertical: self.isVertical) }
+
+            return pageChanged
+                .startWith(pagingView.initialPage)
+        }
+
+        let bindingObserver = Binder(self) { (pagingView, page: Int) in
+            pagingView.updatePage(page)
+        }
+
+        return ControlProperty(values: source, valueSink: bindingObserver)
+    }
+
+    var isVertical: Bool = false {
+        didSet {
+            layoutView()
+        }
+    }
+    var contentViews: [UIView] = [] {
+        didSet {
+            oldValue.filter { !contentViews.contains($0) }.forEach { $0.removeFromSuperview() }
+            contentViews.forEach { self.addSubview($0) }
+            layoutView()
+        }
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        lastTouchedLocation = touches.first?.location(in: self)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+
+    convenience required init(_ views: [UIView], page: Int = 0, frame: CGRect = .zero, isVertical: Bool) {
+        self.init(frame: frame)
+        self.contentViews = views
+        self.isVertical = isVertical
+        self.initialPage = page
+        configureView()
+        layoutView()
+        configurePosition()
+        binding()
+    }
+
+    convenience required init(_ views: UIView..., page: Int = 0, frame: CGRect = .zero, isVertical: Bool) {
+        self.init(frame: frame)
+        self.contentViews = views
+        self.isVertical = isVertical
+        self.initialPage = page
+        configureView()
+        layoutView()
+        configurePosition()
+        binding()
+    }
+
+    /// Configure views
+    private func configureView() {
+        if #available(iOS 11.0, *) {
+            contentInsetAdjustmentBehavior = .never
+        }
+        showsVerticalScrollIndicator = false
+        showsHorizontalScrollIndicator = false
+        bounces = false
+        isPagingEnabled = true
+        backgroundColor = .clear
+        contentViews.forEach { self.addSubview($0) }
+    }
+
+    /// Configure position
+    private func configurePosition() {
+        if let initialOrigin = contentViews.origin(initialPage, isVertical: isVertical) {
+            contentOffset = initialOrigin
+        }
+    }
+
+    private func binding() {
+        rx.page.subscribe(onNext: { [weak self] in
+            self?.page = $0
+        })
+            .disposed(by: disposeBag)
+    }
+
+    /// Layout views
+    private func layoutView() {
+        contentViews.configurePosition(isVertical)
+        contentSize = contentViews.contentSize(isVertical, frame: frame)
+    }
+
+    func updatePage(_ page: Int, animated: Bool = true) {
+        guard let origin = contentViews.origin(page, isVertical: isVertical) else { return }
+        setContentOffset(origin, animated: animated)
+    }
+
+    func updatePage(_ page: Int, animated: Bool = true, completion: @escaping ((Bool) -> Void) = { _ in }) {
+        guard let origin = contentViews.origin(page, isVertical: isVertical) else {
+            completion(false)
+            return
+        }
+        UIView.animate(
+            withDuration: animated ? 0.3 : 0,
+            animations: {
+                self.setContentOffset(origin, animated: false)
+            },
+            completion: { finished in
+                completion(finished)
+            }
+        )
+    }
+}
 
 private extension Array where Element: UIView {
     /// それぞれの方向に対して積み上げた形の位置を取得する
@@ -17,13 +154,9 @@ private extension Array where Element: UIView {
     /// 現在のページ数を算出する
     func page(_ position: CGPoint, isVertical: Bool) -> Int {
         guard !isEmpty else { return 0 }
-        var length: CGFloat = 0
         let targetPosition: CGFloat = isVertical ? position.y : position.x
-        let getLength: (UIView) -> CGFloat = { isVertical ? $0.bounds.height : $0.bounds.width }
-
         for (offset, element) in enumerated() {
-            length += getLength(element)
-            if targetPosition < length {
+            if targetPosition == floor(isVertical ? element.frame.minY : element.frame.minX) {
                 return offset
             }
         }
@@ -48,110 +181,17 @@ private extension Array where Element: UIView {
     }
 }
 
-class PagingView: UIScrollView {
-    fileprivate var initialIndex: Int = 0
-    var isVertical: Bool = false {
-        didSet {
-            layoutView()
-        }
-    }
-    var contentViews: [UIView] = [] {
-        didSet {
-            oldValue.filter { !contentViews.contains($0) }.forEach { $0.removeFromSuperview() }
-            contentViews.filter { !oldValue.contains($0) }.forEach { self.addSubview($0) }
-            layoutView()
-        }
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    convenience required init(_ views: [UIView], index: Int = 0, frame: CGRect = .zero, isVertical: Bool) {
-        self.init(frame: frame)
-        self.contentViews = views
-        self.isVertical = isVertical
-        self.initialIndex = index
-        configureView()
-        layoutView()
-        configurePosition()
-    }
-
-    convenience required init(_ views: UIView..., index: Int = 0, frame: CGRect = .zero, isVertical: Bool) {
-        self.init(frame: frame)
-        self.contentViews = views
-        self.isVertical = isVertical
-        self.initialIndex = index
-        configureView()
-        layoutView()
-        configurePosition()
-    }
-
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        layoutView()
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        layoutView()
-        layoutIfNeeded()
-    }
-
-    /// Configure views
-    private func configureView() {
-        contentInsetAdjustmentBehavior = .never
-        showsVerticalScrollIndicator = false
-        bounces = false
-        isPagingEnabled = true
-        contentViews.forEach { self.addSubview($0) }
-    }
-
-    /// Configure position
-    private func configurePosition() {
-        if let initialOrigin = contentViews.origin(initialIndex, isVertical: isVertical) {
-            contentOffset = initialOrigin
-        }
-    }
-
-    /// Layout views
-    private func layoutView() {
-        contentViews.configurePosition(isVertical)
-        contentSize = contentViews.contentSize(isVertical, frame: frame)
-    }
-
-    func updatePage(_ index: Int) {
-        guard let origin = contentViews.origin(index, isVertical: isVertical) else { return }
-        setContentOffset(origin, animated: true)
-    }
-}
-
 #if canImport(RxSwift) && canImport(RxCocoa)
 
-import RxCocoa
-import RxSwift
-
 extension Reactive where Base: PagingView {
+    /// 最後にタッチされた位置
+    var lastTouchedLocation: PublishRelay<CGPoint> {
+        return base.rxLastTouchedLocation
+    }
+
+    /// 現在のページ
     var page: ControlProperty<Int> {
-        let source: Observable<Int> = Observable.deferred { [weak pagingView = self.base] in
-            let pageChanged: Observable<Int> = Observable.merge(pagingView?.rx.didEndDragging.filter { !$0 }.mapToVoid() ?? Observable.empty(),
-                                                                pagingView?.rx.didEndDecelerating.mapToVoid() ?? Observable.empty())
-                .filter { [weak self = self.base] in self != nil }
-                .map { [unowned self = self.base] in self.contentViews.page(self.contentOffset, isVertical: self.isVertical) }
-
-            return pageChanged
-                .startWith(pagingView?.initialIndex ?? 0)
-        }
-
-        let bindingObserver = Binder(base) { (pagingView, index: Int) in
-            pagingView.updatePage(index)
-        }
-
-        return ControlProperty(values: source, valueSink: bindingObserver)
+        return base.rxPage
     }
 }
 
