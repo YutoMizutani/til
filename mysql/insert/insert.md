@@ -1,0 +1,4 @@
+
+```sql
+INSERT INTO <TABLE> (<COLUMN1>, <COLUMN2>) VALUES (<VALUE1> <VALUE2>)
+```
