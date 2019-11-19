@@ -21,3 +21,4 @@ stackView.addArrangedSubview(view)
 #### References
 
 [[iOS9]UIStackViewについて](https://qiita.com/kaway/items/54d750f2cc5b7c7465e5)
+[Add views in UIStackView programmatically](https://stackoverflow.com/questions/30728062/add-views-in-uistackview-programmatically)
