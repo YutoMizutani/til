@@ -31,11 +31,23 @@ cat << 'EOT' > install-xcode.sh
 xcode-select --install
 EOT
 
+# Install Homebrew
+cat << 'EOT' > install-homebrew.sh
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+brew analytics off
+brew upgrade
+brew install bash
+echo export HOMEBREW_CASK_OPTS="--appdir=/Applications" >> .bashrc
+echo export HOMEBREW_NO_ANALYTICS=1 >> .bashrc
+source .bashrc
+EOT
+
 # Install ruby (rbenv, bundler)
 cat << 'EOT' > install-rbenv.sh
 brew install rbenv ruby-build
-rbenv r install $(rbenv install -l | grep -v - | tail -1)
-gem install bundler
+rbenv install $(rbenv install -l | grep -v - | tail -1)
+rbenv global $(rbenv install -l | grep -v - | tail -1)
+sudo gem install bundler
 rbenv rehash
 EOT
 
@@ -50,17 +62,6 @@ python3=$(pyenv install -l | grep -v '[a-zA-Z]' | grep -e '\s3\.?*' | tail -1)
 pyenv install $python3
 pyenv global $python3
 pyenv rehash
-EOT
-
-# Install Homebrew
-cat << 'EOT' > install-homebrew.sh
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-brew analytics off
-brew upgrade
-brew install bash
-echo export HOMEBREW_CASK_OPTS="--appdir=/Applications" >> .bashrc
-echo export HOMEBREW_NO_ANALYTICS=1 >> .bashrc
-source .bashrc
 EOT
 
 cat << 'EOT' > install-nodebrew.sh
@@ -145,44 +146,9 @@ cat << 'EOT' > install-google-chrome.sh
 brew cask install google-chrome
 EOT
 
-# Install Skitch
-cat << 'EOT' > install-skitch.sh
-brew cask install skitch
-EOT
-
-# Install Dropbox
-cat << 'EOT' > install-dropbox.sh
-brew cask install dropbox
-EOT
-
-# Install Vagrant
-cat << 'EOT' > install-vagrant.sh
-brew cask install vagrant
-EOT
-
-# Install VirtualBox
-cat << 'EOT' > install-virtualbox.sh
-brew cask install virtualbox
-EOT
-
-# Install cyberduck
-cat << 'EOT' > install-cyberduck.sh
-brew cask install cyberduck
-EOT
-
 # Install Alfred
 cat << 'EOT' > install-alfred.sh
 brew cask install alfred
-EOT
-
-# Install Gimp
-cat << 'EOT' > install-gimp.sh
-brew cask install gimp
-EOT
-
-# Install Cheatsheet
-cat << 'EOT' > install-cheatsheet.sh
-brew cask install cheatsheet
 EOT
 
 # Install Slack
@@ -200,7 +166,7 @@ cat << 'EOT' > install-appcleaner.sh
 brew cask install appcleaner
 EOT
 
-# Install The Unarchive
+# Install The Unarchiver
 cat << 'EOT' > install-the-unarchiver.sh
 brew cask install the-unarchiver
 EOT
@@ -222,9 +188,9 @@ done
 
 cd dependencies
 sh install-xcode.sh
+sh install-homebrew.sh
 sh install-rbenv.sh
 sh install-pyenv.sh
-sh install-homebrew.sh
 sh install-nodebrew.sh
 cd ..
 
